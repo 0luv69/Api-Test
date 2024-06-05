@@ -46,21 +46,31 @@ def put_std(request, id):
 
 @api_view(['patch'])
 def patch_std(request, id):
-    data = request.data
-    try:
+    # try:
+        data = request.data
         student = Student.objects.get(id= id)
-        serializer_var= stu_serilizer(student, data=data, partial= True)
+        serializer_var= stu_serilizer(student, data=data, partial =True)
         if serializer_var.is_valid():
             serializer_var.save()
             return Response({'status':200,'payload': data,'message': 'post student success' })
         else:
             return Response({'status':403,'payload': data,'error reason' : serializer_var.errors , 'message': 'Bad request here' })
         pass
+    # except Exception as e:
+    #     return Response({'status':403,'error reason' : f'{e}' , 'message': 'hint: ID is not valid' })
+
+# ?id=1
+@api_view(['delete'])
+def delete_std(request):
+    id = request.GET.get('id')
+    try:
+        std_obj = Student.objects.get(id=id)
+        std_obj.delete()
+        return Response({'status': 200,'message': f'Deleted  id number: {id}'}, status=200)
+    except Student.DoesNotExist:
+        return Response({'status': 404, 'error_reason': 'Student not found', 'message': 'Hint: ID is not valid'}, status=404)
     except Exception as e:
         return Response({'status':403,'error reason' : f'{e}' , 'message': 'hint: ID is not valid' })
 
-# ?id=1
-def delete_std(request):
-    id = request.GET.get('id')
-    Student.delete()
-    pass
+
+
