@@ -10,7 +10,7 @@ class stu_serilizer(serializers.ModelSerializer):
         model = Student
         # fields = '__all__'
         # exclude = ['id']
-        fields = ['name', 'age', 'father_name','id']
+        fields = ['name', 'age', 'father_name']
     
     def validate(self, data):
         if 'age' in data and data['age'] <18:
