@@ -6,8 +6,9 @@ from .serializer import *
 
 @api_view(['GET'])
 def home(request):
-    std_obj = Student.objects.all()
-    serializer_var = stu_serilizer(std_obj, many = True)
+    # std_obj = Student.objects.all()
+    std_obj = StudentMark.objects.all()
+    serializer_var = std_mark_serializers(std_obj, many = True)
 
     return Response({
         'status':200,
