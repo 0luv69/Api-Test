@@ -4,7 +4,7 @@ from django.urls import path, include
 
 urlpatterns = [
 
-    path('std', Std_Api.as_view()),
+    path('std/<id>', Std_Api.as_view()),
 
 
 

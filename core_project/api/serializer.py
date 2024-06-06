@@ -8,9 +8,9 @@ import re
 class stu_serilizer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        # fields = '__all__'
+        fields = '__all__'
         # exclude = ['id']
-        fields = ['name', 'age', 'father_name']
+        # fields = ['name', 'age', 'father_name']
     
     def validate(self, data):
         if 'age' in data and data['age'] <18:
