@@ -1,13 +1,20 @@
+from .serializer import *
+from .models import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import *
-from .serializer import *
-
 from rest_framework.views import APIView
+from rest_framework.authtoken.models import Token
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class Std_Api(APIView):
+    
+    authentication_classes = [ TokenAuthentication ]
+    permission_classes = [IsAuthenticated]
+
     def get(self , request, id):
+        print (request.user)
         std_obj = Student.objects.all()
         serializer_var = stu_serilizer(std_obj, many = True)
         return Response({
@@ -52,6 +59,25 @@ class Std_Api(APIView):
             return Response({'error_reason': 'Student not found', 'message': 'Hint: ID is not valid'}, status=404)
         except Exception as e:
            return Response({ 'payload': data, 'error': e }, status=403)
+
+
+class RegisterUser(APIView):
+    def post(self, request):
+        data = request.data
+        usr_serilaizer_var= UserSerializer(data=data)
+        if usr_serilaizer_var.is_valid():
+            usr_serilaizer_var.save()
+            user_mdl = User.objects.get(username= usr_serilaizer_var.data['username'])
+            token, _ = Token.objects.get_or_create(user = user_mdl)
+
+            return Response({'payload': usr_serilaizer_var.data, "message": "User Token created sucess ", "Token": str(token)}, status=200)
+        return Response({'payload': usr_serilaizer_var.data, "errors": usr_serilaizer_var.errors, "Message": 'Failed'}, status=403)
+    
+
+
+        
+    pass
+
 
 
 # @api_view(['GET'])
